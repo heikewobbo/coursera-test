@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const dateTimeElement = document.querySelector(".date-time");
   const filterInput = document.getElementById("filter-input");
 
-  const rowsPerPage = 10;
+  const rowsPerPage = 25;
   let currentPage = 0;
   let data = [];
 
