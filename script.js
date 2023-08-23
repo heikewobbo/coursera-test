@@ -1,87 +1,66 @@
 document.addEventListener("DOMContentLoaded", function () {
-  fetch("/coursera-test/airports.dat")
-    .then(response => response.text())
-    .then(data => {
-      const lines = data.trim().split("\n");
-      const parsedData = lines.map(line => {
-        const [icao, long, lat, name] = line.split("/");
-        return {icao, long, lat, name};
-      });
-      populateTable(parsedData);
-    })
-    .catch(error => console.error("Errore nella richiesta:", error));
-});
+  const tableContainer = document.querySelector(".table-container");
+  const prevPageButton = document.getElementById("prev-page");
+  const nextPageButton = document.getElementById("next-page");
 
-function populateTable(data) {
-  const table = document.getElementById("data-table");
-  const tbody = table.querySelector("tbody");
+  const rowsPerPage = 30; // Numero di righe da visualizzare per pagina
+  let currentPage = 0; // Pagina attuale
 
-  tbody.innerHTML = "";
+  function loadData(callback) {
+    fetch("/coursera-test/airports.dat") // Sostituisci con il percorso corretto
+      .then(response => response.text())
+      .then(data => {
+        const lines = data.trim().split("\n");
+        const parsedData = lines.map(line => {
+          const [icao, long, lat, name] = line.split("/");
+          return { icao, long, lat, name };
+        });
+        callback(parsedData);
+      })
+      .catch(error => console.error("Errore nel caricamento dei dati:", error));
+  }
 
-  data.forEach(item => {
+  function updateTable(data) {
+    const start = currentPage * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    const dataToDisplay = data.slice(start, end);
+    const tbody = document.getElementById("data-table").querySelector("tbody");
+    tbody.innerHTML = "";
+
+    dataToDisplay.forEach(item => {
+      const row = createRow(item);
+      tbody.appendChild(row);
+    });
+
+    updatePaginationButtons();
+  }
+
+  function createRow(item) {
     const row = document.createElement("tr");
     row.innerHTML = `<td>${item.icao}</td><td>${item.long}</td><td>${item.lat}</td><td>${item.name}</td>`;
-    tbody.appendChild(row);
-  });
-}
-
-// Funzione per filtrare la tabella in base ai valori di input
-function filterTable() {
-  const inputElements = document.querySelectorAll(".filter-input");
-  const filters = Array.from(inputElements).map(input => input.value.toLowerCase());
-
-  const rows = document.querySelectorAll("#data-table tbody tr");
-
-  rows.forEach((row, index) => {
-    const cells = Array.from(row.querySelectorAll("td"));
-    const matches = cells.every((cell, cellIndex) =>
-      cell.textContent.toLowerCase().includes(filters[cellIndex])
-    );
-
-    row.style.display = matches ? "table-row" : "none";
-  });
-}
-
-// Aggiungi event listener agli input per triggerare il filtraggio
-const filterInputs = document.querySelectorAll(".filter-input");
-filterInputs.forEach(input => {
-  input.addEventListener("input", filterTable);
-});
-
-const tableContainer = document.querySelector(".table-container");
-const prevPageButton = document.getElementById("prev-page");
-const nextPageButton = document.getElementById("next-page");
-
-const rowsPerPage = 30; // Numero di righe da visualizzare per pagina
-let currentPage = 0; // Pagina attuale
-
-function updateTable() {
-  const start = currentPage * rowsPerPage;
-  const end = start + rowsPerPage;
-
-  const dataToDisplay = data.slice(start, end);
-  const tbody = document.getElementById("data-table").querySelector("tbody");
-  tbody.innerHTML = "";
-
-  dataToDisplay.forEach(item => {
-    const row = createRow(item);
-    tbody.appendChild(row);
-  });
-}
-
-prevPageButton.addEventListener("click", () => {
-  if (currentPage > 0) {
-    currentPage--;
-    updateTable();
+    return row;
   }
-});
 
-nextPageButton.addEventListener("click", () => {
-  if (currentPage < Math.ceil(data.length / rowsPerPage) - 1) {
-    currentPage++;
-    updateTable();
+  function updatePaginationButtons() {
+    prevPageButton.disabled = currentPage === 0;
+    nextPageButton.disabled = currentPage === Math.ceil(data.length / rowsPerPage) - 1;
   }
-});
 
-// Carica le prime righe
-updateTable();
+  prevPageButton.addEventListener("click", () => {
+    if (currentPage > 0) {
+      currentPage--;
+      updateTable();
+    }
+  });
+
+  nextPageButton.addEventListener("click", () => {
+    if (currentPage < Math.ceil(data.length / rowsPerPage) - 1) {
+      currentPage++;
+      updateTable();
+    }
+  });
+
+  // Carica i dati e avvia l'aggiornamento della tabella
+  loadData(updateTable);
+});
