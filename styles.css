@@ -1,8 +1,13 @@
     /* Stile della tabella */
-.table-container {
-  max-height: 300px; /* Altezza massima del contenitore */
-  overflow-y: scroll; /* Mostra la barra di scorrimento verticale se necessario */
-}
+    .table-container {
+        overflow: auto; /* Abilita lo scrolling quando necessario */
+        max-height: 80vh; /* Altezza massima della tabella */
+      }
+      
+      /* Rimuovi il bordo del tbody per un aspetto pulito */
+      #data-table tbody {
+        border: none;
+      }
 
 #data-table {
   width: 100%;
@@ -88,3 +93,11 @@
 .dropdown:hover .dropdown-content {
   display: block;
 }
+
+/* Aggiungi stile ai link SimBrief */
+.simbrief-link {
+    text-decoration: none; /* Rimuovi il sottolineato */
+    color: #000000; /* Imposta il colore del testo */
+    cursor: pointer; /* Cambia il cursore al passaggio sopra il link */
+  }
+  
