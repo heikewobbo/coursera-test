@@ -20,7 +20,7 @@ function populateTable(data) {
 
   data.forEach(item => {
     const row = document.createElement("tr");
-    row.innerHTML = `<td>${item.nome}</td><td>${item.cognome}</td><td>${item.eta}</td>`;
+    row.innerHTML = `<td>${item.icao}</td><td>${item.long}</td><td>${item.lat}</td><td>${item.name}</td>`;
     tbody.appendChild(row);
   });
 }
