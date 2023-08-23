@@ -1,10 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
-  fetch("/coursera-test/lista.dat")
+  fetch("/coursera-test/airports.dat")
     .then(response => response.text())
     .then(data => {
       const lines = data.trim().split("\n");
       const parsedData = lines.map(line => {
-        const [icao, long, lat, name] = line.split(" ");
+        const [icao, long, lat, name] = line.split("/");
         return {icao, long, lat, name};
       });
       populateTable(parsedData);
