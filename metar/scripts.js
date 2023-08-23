@@ -11,7 +11,7 @@ async function fetchMetar() {
     const enteredAirportCode = airportInput.value.toUpperCase(); // Convert input to uppercase
 
     try {
-        const response = await fetch(`http://api.aviationstack.com/v1/metar?access_key=${apiKey}&airport=${enteredAirportCode}`);
+        const response = await fetch(`https://api.aviationstack.com/v1/metar?access_key=${apiKey}&airport=${enteredAirportCode}`);
         const data = await response.json();
 
         if (data.data && data.data.length > 0) {
