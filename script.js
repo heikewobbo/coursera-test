@@ -2,10 +2,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const tableContainer = document.querySelector(".table-container");
   const prevPageButton = document.getElementById("prev-page");
   const nextPageButton = document.getElementById("next-page");
-  const dateTimeElement = document.querySelector(".date-time"); // Aggiunto
+  const dateTimeElement = document.querySelector(".date-time");
+  const filterInput = document.getElementById("filter-input");
 
-  const rowsPerPage = 25; // Numero di righe da visualizzare per pagina
-  let currentPage = 0; // Pagina attuale
+  const rowsPerPage = 10;
+  let currentPage = 0;
+  let data = [];
 
   function getCurrentDateTime() {
     const now = new Date();
@@ -13,26 +15,34 @@ document.addEventListener("DOMContentLoaded", function () {
     return now.toLocaleString("it-IT", options);
   }
 
-  dateTimeElement.textContent = getCurrentDateTime(); // Aggiunto
+  dateTimeElement.textContent = getCurrentDateTime();
+
   function loadData(callback) {
-    fetch("/coursera-test/airports.dat") // Sostituisci con il percorso corretto
+    fetch("/coursera/airports.dat")
       .then(response => response.text())
       .then(data => {
         const lines = data.trim().split("\n");
-        const parsedData = lines.map(line => {
+        data = lines.map(line => {
           const [icao, long, lat, name] = line.split("/");
-          return { icao, long, lat, name };
+          return { icao, name };
         });
-        callback(parsedData);
+        callback(data);
       })
       .catch(error => console.error("Errore nel caricamento dei dati:", error));
   }
 
-  function updateTable(data) {
+  function updateTable(filterText = "") {
     const start = currentPage * rowsPerPage;
     const end = start + rowsPerPage;
 
-    const dataToDisplay = data.slice(start, end);
+    let dataToDisplay = data.slice(start, end);
+
+    if (filterText !== "") {
+      dataToDisplay = dataToDisplay.filter(item => 
+        item.icao.toLowerCase().includes(filterText) || item.name.toLowerCase().includes(filterText)
+      );
+    }
+
     const tbody = document.getElementById("data-table").querySelector("tbody");
     tbody.innerHTML = "";
 
@@ -46,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function createRow(item) {
     const row = document.createElement("tr");
-    row.innerHTML = `<td>${item.icao}</td><td>${item.long}</td><td>${item.lat}</td><td>${item.name}</td>`;
+    row.innerHTML = `<td>${item.icao}</td><td>${item.name}</td>`;
     return row;
   }
 
@@ -69,6 +79,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Carica i dati e avvia l'aggiornamento della tabella
-  loadData(updateTable);
+  filterInput.addEventListener("input", () => {
+    const filterText = filterInput.value.trim().toLowerCase();
+    updateTable(filterText);
+  });
+
+  loadData(data => {
+    data = data;
+    updateTable();
+  });
 });
