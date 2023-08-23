@@ -12,18 +12,45 @@ document.addEventListener("DOMContentLoaded", function () {
     .catch(error => console.error("Errore nella richiesta:", error));
 });
 
-function populateTable(data) {
-  const table = document.getElementById("data-table");
-  const tbody = table.querySelector("tbody");
+const tableContainer = document.querySelector(".table-container");
+const loadingIndicator = document.getElementById("loading");
 
-  tbody.innerHTML = "";
+const rowsPerPage = 50; // Numero di righe da caricare per volta
+let currentPage = 0; // Pagina attuale
 
-  data.forEach(item => {
-    const row = document.createElement("tr");
-    row.innerHTML = `<td>${item.icao}</td><td>${item.long}</td><td>${item.lat}</td><td>${item.name}</td>`;
-    tbody.appendChild(row);
-  });
+function loadRows(page) {
+  const start = page * rowsPerPage;
+  const end = start + rowsPerPage;
+
+  loadingIndicator.style.display = "block";
+
+  // Simula un ritardo per il caricamento dei dati (sostituisci con la tua logica di caricamento)
+  setTimeout(() => {
+    for (let i = start; i < end && i < data.length; i++) {
+      const row = createRow(data[i]);
+      document.getElementById("data-table").querySelector("tbody").appendChild(row);
+    }
+
+    loadingIndicator.style.display = "none";
+  }, 1000);
 }
+
+function createRow(item) {
+  const row = document.createElement("tr");
+  row.innerHTML = `<td>${item.icao}</td><td>${item.long}</td><td>${item.lat}</td><td>${item.name}</td>`;
+  return row;
+}
+
+// Carica le prime righe
+loadRows(currentPage);
+
+// Rileva lo scorrimento del contenitore
+tableContainer.addEventListener("scroll", () => {
+  if (tableContainer.scrollTop + tableContainer.clientHeight >= tableContainer.scrollHeight - 10) {
+    currentPage++;
+    loadRows(currentPage);
+  }
+});
 
 // Funzione per filtrare la tabella in base ai valori di input
 function filterTable() {
