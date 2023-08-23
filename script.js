@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
   dateTimeElement.textContent = getCurrentDateTime();
 
   function loadData(callback) {
-    fetch("coursera-test/airports.dat")
+    fetch("/coursera-test/airports.dat")
       .then(response => response.text())
       .then(rawData => {
         const lines = rawData.trim().split("\n");
