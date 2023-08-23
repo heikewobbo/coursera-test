@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>METAR Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #search-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #airport-input {
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        #search-button {
+            padding: 5px 10px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #metar-info {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>METAR Information for Selected Airport</h1>
+    <div id="search-container">
+        <label for="airport-input">Enter Airport Code: </label>
+        <input type="text" id="airport-input" placeholder="Enter airport code...">
+        <button id="search-button">Search</button>
+    </div>
+    <div id="metar-info"></div>
+    <script src="script.js"></script>
+</body>
+</html>
