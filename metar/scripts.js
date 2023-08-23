@@ -1,7 +1,5 @@
 // Replace 'YOUR_API_KEY' with your actual API key from AviationStack
 const apiKey = '1657c83be8cbfaaa74a58aa6ac8bd419';
-const airportCode = 'LIMC'; // Replace with the desired airport code
-
 const metarContainer = document.getElementById('metar-info');
 
 const airportInput = document.getElementById('airport-input');
