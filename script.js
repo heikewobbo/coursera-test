@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const filterInput = document.getElementById("filter-input");
 
   const rowsPerPage = 25;
-  let currentPage = 0;
+  let currentPage = 1;
   let data = [];
 
   function getCurrentDateTime() {
