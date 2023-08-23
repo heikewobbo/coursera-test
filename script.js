@@ -15,24 +15,37 @@ document.addEventListener("DOMContentLoaded", function () {
 const tableContainer = document.querySelector(".table-container");
 const loadingIndicator = document.getElementById("loading");
 
-const rowsPerPage = 50; // Numero di righe da caricare per volta
-let currentPage = 0; // Pagina attuale
+const rowsPerPage = 30; // Numero di righe da caricare per volta
+let currentPage = 1; // Pagina attuale
+let loading = false; // Flag per evitare duplicati di caricamento
 
-function loadRows(page) {
-  const start = page * rowsPerPage;
-  const end = start + rowsPerPage;
+async function loadRows() {
+  if (loading) return;
 
+  loading = true;
   loadingIndicator.style.display = "block";
 
-  // Simula un ritardo per il caricamento dei dati (sostituisci con la tua logica di caricamento)
-  setTimeout(() => {
-    for (let i = start; i < end && i < data.length; i++) {
-      const row = createRow(data[i]);
-      document.getElementById("data-table").querySelector("tbody").appendChild(row);
+  try {
+    const response = await fetch(`/api/data?page=${currentPage}&limit=${rowsPerPage}`);
+    const data = await response.json();
+
+    if (data.length === 0) {
+      loadingIndicator.innerHTML = "Nessun altro dato disponibile";
+      return;
     }
 
+    data.forEach(item => {
+      const row = createRow(item);
+      document.getElementById("data-table").querySelector("tbody").appendChild(row);
+    });
+
+    currentPage++;
+  } catch (error) {
+    console.error("Errore durante il caricamento dei dati:", error);
+  } finally {
+    loading = false;
     loadingIndicator.style.display = "none";
-  }, 1000);
+  }
 }
 
 function createRow(item) {
@@ -41,16 +54,15 @@ function createRow(item) {
   return row;
 }
 
-// Carica le prime righe
-loadRows(currentPage);
-
 // Rileva lo scorrimento del contenitore
 tableContainer.addEventListener("scroll", () => {
   if (tableContainer.scrollTop + tableContainer.clientHeight >= tableContainer.scrollHeight - 10) {
-    currentPage++;
-    loadRows(currentPage);
+    loadRows();
   }
 });
+
+// Carica le prime righe
+loadRows();
 
 // Funzione per filtrare la tabella in base ai valori di input
 function filterTable() {
