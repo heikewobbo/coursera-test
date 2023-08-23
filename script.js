@@ -54,10 +54,26 @@ document.addEventListener("DOMContentLoaded", function () {
     updatePaginationButtons();
   }
 
- function createRow(item) {
+  function createRow(item) {
     const row = document.createElement("tr");
-    row.innerHTML = `
-      <td><a href="http://www.simbrief.com/system/dispatch.php?dest=${item.icao}" target="_blank">${item.icao}</a></td><td>${item.name}</td>`;
+
+    // Creazione del link con l'ICAO
+    const icaoLink = document.createElement("a");
+    icaoLink.href = `http://www.simbrief.com/system/dispatch.php?dest=${item.icao}`;
+    icaoLink.target = "_blank";
+    icaoLink.textContent = item.icao;
+
+    // Creazione delle celle della riga
+    const icaoCell = document.createElement("td");
+    icaoCell.appendChild(icaoLink);
+
+    const nameCell = document.createElement("td");
+    nameCell.textContent = item.name;
+
+    // Aggiunta delle celle alla riga
+    row.appendChild(icaoCell);
+    row.appendChild(nameCell);
+
     return row;
   }
 
