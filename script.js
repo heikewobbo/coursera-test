@@ -54,9 +54,10 @@ document.addEventListener("DOMContentLoaded", function () {
     updatePaginationButtons();
   }
 
-  function createRow(item) {
+ function createRow(item) {
     const row = document.createElement("tr");
-    row.innerHTML = `<td>${item.icao}</td><td>${item.name}</td>`;
+    row.innerHTML = `
+      <td><a href="http://www.simbrief.com/system/dispatch.php?dest=${item.icao}" target="_blank">${item.icao}</a></td><td>${item.name}</td>`;
     return row;
   }
 
