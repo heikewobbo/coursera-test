@@ -135,7 +135,7 @@ const searchButton = document.getElementById('search-button');
 searchButton.addEventListener('click', fetchMetar);
 
 async function fetchMetar() {
-    const enteredAirportCode = airportInput.value.toUpperCase(); // Convert input to uppercase
+  const enteredAirportCode = airportInput.value.toUpperCase();
 
     try {
         const response = await fetch(`https://api.aviationstack.com/v1/metar?access_key=${apiKey}&airport=${enteredAirportCode}`);
