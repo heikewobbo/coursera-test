@@ -3,11 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tabella con Filtri e Stile</title>
-  <!-- Collegamento ai file CSS di Bootstrap (assicurati di utilizzare le versioni corrette) -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <title>Tabella con Dati da File .dat</title>
   <style>
-/* Stile della tabella */
+    /* Stile della tabella */
 .table-container {
   max-height: 300px; /* Altezza massima del contenitore */
   overflow-y: scroll; /* Mostra la barra di scorrimento verticale se necessario */
@@ -97,54 +95,43 @@
 .dropdown:hover .dropdown-content {
   display: block;
 }
+
   </style>
 </head>
+<body>
   <div class="header">
-    <h1>Airport Mega List</h1>
     <div class="date-time">Data e ora</div>
+    <div class="search">
+      <input type="text" id="filter-input" placeholder="Cerca per ICAO o Nome">
+    </div>
     <div class="dropdown">
       <button class="dropbtn">Menu</button>
       <div class="dropdown-content">
-        <a href="#">Home</a>
         <a href="#">Pagina 1</a>
         <a href="#">Pagina 2</a>
-        <!-- Aggiungi altri link qui -->
+        <a href="#">Pagina 3</a>
       </div>
     </div>
   </div>
-</div>
-  <div class="container">
-    <!-- Campi di input per i filtri -->
-    <div class="mb-3">
-      <label for="icao-filter">ICAO: </label>
-      <input type="text" id="icao-filter" class="form-control filter-input">
-      <label for="name-filter">Name: </label>
-      <input type="text" id="name-filter" class="form-control filter-input">
-    </div>
-    <!-- Aggiungi altri campi di input per i filtri qui -->
-
-    <!-- Tabella con stile Bootstrap -->
   <div class="table-container">
-  <table id="data-table" class="table table-striped table-bordered">
-    <thead>
-      <tr>
-        <th>ICAO</th>
-        <th>Longitude</th>
-        <th>Latitude</th>
-        <th>Name</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Qui verranno inserite le righe tramite JavaScript -->
-    </tbody>
-  </table>
-</div>
-<div class="pagination">
-  <button id="prev-page">Indietro</button>
-  <button id="next-page">Avanti</button>
-</div>
-
-  <!-- Collegamento al tuo file JavaScript -->
+    <table id="data-table">
+      <thead>
+        <tr>
+          <th>ICAO</th>
+          <th>Longitude</th>
+          <th>Latitude</th>
+          <th>Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Qui verranno inserite le righe tramite JavaScript -->
+      </tbody>
+    </table>
+  </div>
+  <div class="pagination">
+    <button id="prev-page">Indietro</button>
+    <button id="next-page">Avanti</button>
+  </div>
   <script src="script.js"></script>
 </body>
 </html>
