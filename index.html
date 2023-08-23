@@ -7,6 +7,50 @@
   <!-- Collegamento ai file CSS di Bootstrap (assicurati di utilizzare le versioni corrette) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <style>
+/* Stile della tabella */
+.table-container {
+  max-height: 300px; /* Altezza massima del contenitore */
+  overflow-y: scroll; /* Mostra la barra di scorrimento verticale se necessario */
+}
+
+#data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+#data-table th,
+#data-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+#data-table th {
+  background-color: #f2f2f2;
+}
+
+/* Stile dei pulsanti di paginazione */
+.pagination {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.pagination button {
+  padding: 5px 10px;
+  margin: 0 5px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+/* Stile dell'intestazione */
 .header {
   display: flex;
   justify-content: space-between;
@@ -19,25 +63,23 @@
   margin: 0;
 }
 
-/* Stile del menu a cascata */
 .dropdown {
   position: relative;
 }
+
 .dropbtn {
-  background-color: #4CAF50;
+  background-color: #007bff;
   color: white;
-  padding: 10px 20px;
+  padding: 5px 10px;
   border: none;
   cursor: pointer;
 }
 
-/* Stile del menu a cascata */
 .dropdown-content {
   display: none;
   position: absolute;
   background-color: #f9f9f9;
   min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
 }
 
@@ -48,41 +90,13 @@
   display: block;
 }
 
-/* Cambia lo stile del link al passaggio del mouse */
 .dropdown-content a:hover {
   background-color: #f1f1f1;
 }
 
-/* Mostra il menu a cascata quando si passa il mouse sopra il pulsante */
 .dropdown:hover .dropdown-content {
   display: block;
 }
-    /* Stile personalizzato */
-    body {
-      padding: 20px;
-    }
-    table {
-      width: 100%;
-    }
-    th {
-      font-weight: bold;
-    }
-    .table-container {
-  max-height: 300px; /* Altezza massima del contenitore */
-  overflow-y: scroll; /* Mostra la barra di scorrimento verticale se necessario */
-}
-
-#loading {
-  display: none;
-  padding: 10px;
-  text-align: center;
-}
-
-.pagination {
-  text-align: center;
-  margin-top: 10px;
-}
-
   </style>
 </head>
   <div class="header">
