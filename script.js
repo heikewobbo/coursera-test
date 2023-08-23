@@ -1,12 +1,16 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Esegui questa funzione quando la pagina è completamente caricata
-
-fetch('/coursera-test/lista.dat')
-  .then(response => response.text())
-  .then(data => {
-    // Processa e popola i dati nella tabella
-  })
-  .catch(error => console.error('Errore nella richiesta:', error));
+  fetch("/coursera-test/lista.dat")
+    .then(response => response.text())
+    .then(data => {
+      const lines = data.trim().split("\n");
+      const parsedData = lines.map(line => {
+        const [nome, cognome, eta] = line.split("/");
+        return { nome, cognome, eta };
+      });
+      populateTable(parsedData);
+    })
+    .catch(error => console.error("Errore nella richiesta:", error));
+});
 
 function populateTable(data) {
   const table = document.getElementById("data-table");
