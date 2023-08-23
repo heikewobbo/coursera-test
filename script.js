@@ -4,8 +4,8 @@ document.addEventListener("DOMContentLoaded", function () {
     .then(data => {
       const lines = data.trim().split("\n");
       const parsedData = lines.map(line => {
-        const [nome, cognome, eta] = line.split("/");
-        return { nome, cognome, eta };
+        const [icao, long, lat, name] = line.split(" ");
+        return {icao, long, lat, name};
       });
       populateTable(parsedData);
     })
