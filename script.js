@@ -12,57 +12,18 @@ document.addEventListener("DOMContentLoaded", function () {
     .catch(error => console.error("Errore nella richiesta:", error));
 });
 
-const tableContainer = document.querySelector(".table-container");
-const loadingIndicator = document.getElementById("loading");
+function populateTable(data) {
+  const table = document.getElementById("data-table");
+  const tbody = table.querySelector("tbody");
 
-const rowsPerPage = 30; // Numero di righe da caricare per volta
-let currentPage = 1; // Pagina attuale
-let loading = false; // Flag per evitare duplicati di caricamento
+  tbody.innerHTML = "";
 
-async function loadRows() {
-  if (loading) return;
-
-  loading = true;
-  loadingIndicator.style.display = "block";
-
-  try {
-    const response = await fetch(`/api/data?page=${currentPage}&limit=${rowsPerPage}`);
-    const data = await response.json();
-
-    if (data.length === 0) {
-      loadingIndicator.innerHTML = "Nessun altro dato disponibile";
-      return;
-    }
-
-    data.forEach(item => {
-      const row = createRow(item);
-      document.getElementById("data-table").querySelector("tbody").appendChild(row);
-    });
-
-    currentPage++;
-  } catch (error) {
-    console.error("Errore durante il caricamento dei dati:", error);
-  } finally {
-    loading = false;
-    loadingIndicator.style.display = "none";
-  }
+  data.forEach(item => {
+    const row = document.createElement("tr");
+    row.innerHTML = `<td>${item.icao}</td><td>${item.long}</td><td>${item.lat}</td><td>${item.name}</td>`;
+    tbody.appendChild(row);
+  });
 }
-
-function createRow(item) {
-  const row = document.createElement("tr");
-  row.innerHTML = `<td>${item.icao}</td><td>${item.long}</td><td>${item.lat}</td><td>${item.name}</td>`;
-  return row;
-}
-
-// Rileva lo scorrimento del contenitore
-tableContainer.addEventListener("scroll", () => {
-  if (tableContainer.scrollTop + tableContainer.clientHeight >= tableContainer.scrollHeight - 10) {
-    loadRows();
-  }
-});
-
-// Carica le prime righe
-loadRows();
 
 // Funzione per filtrare la tabella in base ai valori di input
 function filterTable() {
@@ -86,3 +47,41 @@ const filterInputs = document.querySelectorAll(".filter-input");
 filterInputs.forEach(input => {
   input.addEventListener("input", filterTable);
 });
+
+const tableContainer = document.querySelector(".table-container");
+const prevPageButton = document.getElementById("prev-page");
+const nextPageButton = document.getElementById("next-page");
+
+const rowsPerPage = 30; // Numero di righe da visualizzare per pagina
+let currentPage = 0; // Pagina attuale
+
+function updateTable() {
+  const start = currentPage * rowsPerPage;
+  const end = start + rowsPerPage;
+
+  const dataToDisplay = data.slice(start, end);
+  const tbody = document.getElementById("data-table").querySelector("tbody");
+  tbody.innerHTML = "";
+
+  dataToDisplay.forEach(item => {
+    const row = createRow(item);
+    tbody.appendChild(row);
+  });
+}
+
+prevPageButton.addEventListener("click", () => {
+  if (currentPage > 0) {
+    currentPage--;
+    updateTable();
+  }
+});
+
+nextPageButton.addEventListener("click", () => {
+  if (currentPage < Math.ceil(data.length / rowsPerPage) - 1) {
+    currentPage++;
+    updateTable();
+  }
+});
+
+// Carica le prime righe
+updateTable();
