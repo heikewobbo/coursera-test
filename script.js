@@ -5,8 +5,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const dateTimeElement = document.querySelector(".date-time");
   const filterInput = document.getElementById("filter-input");
 
-  const rowsPerPage = 25;
-  let currentPage = 1;
+  const rowsPerPage = 10;
+  let currentPage = 0;
   let data = [];
 
   function getCurrentDateTime() {
@@ -24,25 +24,18 @@ document.addEventListener("DOMContentLoaded", function () {
         const lines = data.trim().split("\n");
         data = lines.map(line => {
           const [icao, long, lat, name] = line.split("/");
-          return { icao, name };
+          return { icao, long, lat, name };
         });
         callback(data);
       })
       .catch(error => console.error("Errore nel caricamento dei dati:", error));
   }
 
-  function updateTable(filterText = "") {
+  function updateTable() {
     const start = currentPage * rowsPerPage;
     const end = start + rowsPerPage;
 
-    let dataToDisplay = data.slice(start, end);
-
-    if (filterText !== "") {
-      dataToDisplay = dataToDisplay.filter(item => 
-        item.icao.toLowerCase().includes(filterText) || item.name.toLowerCase().includes(filterText)
-      );
-    }
-
+    const dataToDisplay = data.slice(start, end);
     const tbody = document.getElementById("data-table").querySelector("tbody");
     tbody.innerHTML = "";
 
@@ -56,24 +49,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function createRow(item) {
     const row = document.createElement("tr");
-
-    // Creazione del link con l'ICAO
-    const icaoLink = document.createElement("a");
-    icaoLink.href = `http://www.simbrief.com/system/dispatch.php?dest=${item.icao}`;
-    icaoLink.target = "_blank";
-    icaoLink.textContent = item.icao;
-
-    // Creazione delle celle della riga
-    const icaoCell = document.createElement("td");
-    icaoCell.appendChild(icaoLink);
-
-    const nameCell = document.createElement("td");
-    nameCell.textContent = item.name;
-
-    // Aggiunta delle celle alla riga
-    row.appendChild(icaoCell);
-    row.appendChild(nameCell);
-
+    row.innerHTML = `
+      <td>${item.icao}</td>
+      <td>${item.long}</td>
+      <td>${item.lat}</td>
+      <td>${item.name}</td>
+    `;
     return row;
   }
 
@@ -98,7 +79,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   filterInput.addEventListener("input", () => {
     const filterText = filterInput.value.trim().toLowerCase();
-    updateTable(filterText);
+    const filteredData = data.filter(item => 
+      item.icao.toLowerCase().includes(filterText) || item.name.toLowerCase().includes(filterText)
+    );
+    updateTable(filteredData);
   });
 
   loadData(data => {
