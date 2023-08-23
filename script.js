@@ -2,10 +2,18 @@ document.addEventListener("DOMContentLoaded", function () {
   const tableContainer = document.querySelector(".table-container");
   const prevPageButton = document.getElementById("prev-page");
   const nextPageButton = document.getElementById("next-page");
+  const dateTimeElement = document.querySelector(".date-time"); // Aggiunto
 
-  const rowsPerPage = 30; // Numero di righe da visualizzare per pagina
+  const rowsPerPage = 25; // Numero di righe da visualizzare per pagina
   let currentPage = 0; // Pagina attuale
 
+  function getCurrentDateTime() {
+    const now = new Date();
+    const options = { weekday: "long", year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" };
+    return now.toLocaleString("it-IT", options);
+  }
+
+  dateTimeElement.textContent = getCurrentDateTime(); // Aggiunto
   function loadData(callback) {
     fetch("/coursera-test/airports.dat") // Sostituisci con il percorso corretto
       .then(response => response.text())
