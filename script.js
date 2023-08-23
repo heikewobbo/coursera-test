@@ -1,14 +1,12 @@
 document.addEventListener("DOMContentLoaded", function () {
   // Esegui questa funzione quando la pagina è completamente caricata
 
-  // Effettua una richiesta al server per ottenere i dati dal file .dat
-  fetch("/lista.dat")
-    .then(response => response.json())
-    .then(data => {
-      populateTable(data); // Chiama la funzione per popolare la tabella
-    })
-    .catch(error => console.error("Errore nella richiesta:", error));
-});
+fetch('/coursera-test/lista.dat')
+  .then(response => response.text())
+  .then(data => {
+    // Processa e popola i dati nella tabella
+  })
+  .catch(error => console.error('Errore nella richiesta:', error));
 
 function populateTable(data) {
   const table = document.getElementById("data-table");
