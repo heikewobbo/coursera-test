@@ -17,11 +17,11 @@
 fetch("/airports.dat")
     .then(response => response.text())
     .then(data => {
-        var lines = data.split("\n");
+        var lines = data.split("/");
         var airportsData = [];
 
         lines.forEach(line => {
-            var [ICAO, LONGITUDINE, LATITUDINE, NOME] = line.split("\t");
+            var [ICAO, LONGITUDINE, LATITUDINE, NOME] = line.split("/");
             airportsData.push({ ICAO, LONGITUDINE, LATITUDINE, NOME });
         });
 
@@ -29,7 +29,7 @@ fetch("/airports.dat")
         fetch("/routes.dat")
             .then(response => response.text())
             .then(routesData => {
-                var routes = routesData.split("\n");
+                var routes = routesData.split("/");
                 var map = L.map('map').setView([51.505, -0.09], 2); // Imposta la vista iniziale della mappa
 
                 // Aggiungi una mappa di base
@@ -38,7 +38,7 @@ fetch("/airports.dat")
                 }).addTo(map);
 
                 routes.forEach(route => {
-                    var [COMPAGNIA, DEP, ARR] = route.split("\t");
+                    var [COMPAGNIA, DEP, ARR] = route.split("/");
 
                     var depCoordinates = getCoordinatesFromICAO(DEP, airportsData);
                     var arrCoordinates = getCoordinatesFromICAO(ARR, airportsData);
