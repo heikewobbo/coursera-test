@@ -13,22 +13,65 @@
 <body>
     <div id="map"></div>
       <script>
-    // Inizializza la mappa
-var map = L.map('map').setView([51.505, -0.09], 5);
+// Carica i dati degli aeroporti da un file .dat (sostituisci con il percorso corretto)
+fetch("/airports.dat")
+    .then(response => response.text())
+    .then(data => {
+        var lines = data.split("\n");
+        var airportsData = [];
 
-// Aggiungi le coordinate degli aeroporti
-var airportA = L.latLng(41.474416, 12.145964);
-var airportB = L.latLng(45.200802, 7.64963);
+        lines.forEach(line => {
+            var [ICAO, LONGITUDINE, LATITUDINE, NOME] = line.split("\t");
+            airportsData.push({ ICAO, LONGITUDINE, LATITUDINE, NOME });
+        });
 
-// Crea una rotta tra gli aeroporti
-var route = L.polyline([airportA, airportB], { color: 'blue' }).addTo(map);
+        // Carica le rotte da un file .dat (sostituisci con il percorso corretto)
+        fetch("/routes.dat")
+            .then(response => response.text())
+            .then(routesData => {
+                var routes = routesData.split("\n");
+                var map = L.map('map').setView([51.505, -0.09], 2); // Imposta la vista iniziale della mappa
 
-// Aggiungi gli aeroporti alla mappa
-L.marker(airportA).addTo(map).bindPopup('Aeroporto A');
-L.marker(airportB).addTo(map).bindPopup('Aeroporto B');
+                // Aggiungi una mappa di base
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                }).addTo(map);
 
-// Centro la mappa sulla rotta
-map.fitBounds(route.getBounds());
+                routes.forEach(route => {
+                    var [COMPAGNIA, DEP, ARR] = route.split("\t");
+
+                    var depCoordinates = getCoordinatesFromICAO(DEP, airportsData);
+                    var arrCoordinates = getCoordinatesFromICAO(ARR, airportsData);
+
+                    if (depCoordinates && arrCoordinates) {
+                        // Traccia la rotta sulla mappa
+                        var routePath = L.polyline([depCoordinates, arrCoordinates], { color: 'blue' }).addTo(map);
+                        routePath.bindPopup(`Da: ${DEP}, A: ${ARR}`); // Aggiungi una descrizione popup alla rotta
+                    }
+                });
+
+            })
+            .catch(error => {
+                console.error("Errore nel caricamento dei dati delle rotte:", error);
+            });
+
+    })
+    .catch(error => {
+        console.error("Errore nel caricamento dei dati degli aeroporti:", error);
+    });
+
+// Funzione per ottenere le coordinate dall'ICAO
+function getCoordinatesFromICAO(icao, airportsData) {
+    for (var i = 0; i < airportsData.length; i++) {
+        if (airportsData[i].ICAO === icao) {
+            return {
+                lat: parseFloat(airportsData[i].LATITUDINE),
+                lng: parseFloat(airportsData[i].LONGITUDINE)
+            };
+        }
+    }
+    return null;  // Aeroporto non trovato
+}
   </script>
 </body>
 </html>
