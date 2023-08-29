@@ -61,12 +61,18 @@
     const outputFrame = document.getElementById("outputFrame").contentWindow.document;
 
     function updateOutput() {
-        const htmlContent = encodeURIComponent(htmlEditor.getValue());
-        const cssContent = "<style>" + encodeURIComponent(cssEditor.getValue()) + "</style>";
-        const jsContent = "<script>" + encodeURIComponent(jsEditor.getValue()) + "</script>";
+        const htmlContent = htmlEditor.getValue();
+        const cssContent = cssEditor.getValue();
+        const jsContent = jsEditor.getValue();
 
         outputFrame.open();
-        outputFrame.write(decodeURIComponent(htmlContent) + decodeURIComponent(cssContent) + decodeURIComponent(jsContent));
+        outputFrame.write(htmlContent);
+        const style = outputFrame.createElement('style');
+        style.textContent = cssContent;
+        outputFrame.head.appendChild(style);
+        const script = outputFrame.createElement('script');
+        script.textContent = jsContent;
+        outputFrame.body.appendChild(script);
         outputFrame.close();
     }
 
