@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>METAR in Tempo Reale</title>
+  <script>
+    document.getElementById("getMETAR").addEventListener("click", function () {
+  const airportCode = document.getElementById("airport").value;
+  if (!airportCode) {
+    alert("Inserisci il codice ICAO dell'aeroporto");
+    return;
+  }
+
+  const apiUrl = `https://beta.aviationweather.gov/metar/${airportCode}`;
+
+  fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => {
+      const metar = data[0].raw;
+      document.getElementById("metarResult").innerHTML = `<h2>METAR per ${airportCode}</h2><p>${metar}</p>`;
+    })
+    .catch(error => {
+      console.error("Si è verificato un errore:", error);
+      document.getElementById("metarResult").innerHTML = "<p>Errore durante il recupero del METAR.</p>";
+    });
+});
+  </script>
+</head>
+<body>
+  <h1>Visualizza METAR in Tempo Reale</h1>
+  <label for="airport">Inserisci il codice ICAO dell'aeroporto:</label>
+  <input type="text" id="airport" placeholder="Es. LIRF" />
+  <button id="getMETAR">Ottieni METAR</button>
+  <div id="metarResult"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
