@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mappa con Rotte</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
+        #map {
+            height: 500px;
+        }
+    </style>
+  <script>
+    // Inizializza la mappa
+var map = L.map('map').setView([51.505, -0.09], 5);
+
+// Aggiungi una mappa di base
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+}).addTo(map);
+
+// Aggiungi le coordinate degli aeroporti
+var airportA = L.latLng(airportA_lat, airportA_lng);
+var airportB = L.latLng(airportB_lat, airportB_lng);
+
+// Crea una rotta tra gli aeroporti
+var route = L.polyline([airportA, airportB], { color: 'blue' }).addTo(map);
+
+// Aggiungi gli aeroporti alla mappa
+L.marker(airportA).addTo(map).bindPopup('Aeroporto A');
+L.marker(airportB).addTo(map).bindPopup('Aeroporto B');
+
+// Centro la mappa sulla rotta
+map.fitBounds(route.getBounds());
+  </script>
+</head>
+<body>
+    <div id="map"></div>
+</body>
+</html>
