@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tabella con Dati da File .dat</title>
+  <link rel="stylesheet" href="/coursera-test/styles.css">
+</head>
+<body>
+  <div class="header">
+    <div class="date-time">Data e ora</div>
+    <div class="search">
+      <input type="text" id="filter-input" placeholder="Cerca per ICAO o Nome">
+    </div>
+    <div class="dropdown">
+      <button class="dropbtn">Menu</button>
+      <div class="dropdown-content dropdown-left">
+        <a href="/coursera-test/metar/metar.html">METAR</a>
+        <a href="#">Pagina 2</a>
+        <a href="#">Pagina 3</a>
+      </div>
+    </div>
+  </div>
+  <div class="table-options">
+    <label for="rows-per-page">Righe per pagina:</label>
+    <select id="rows-per-page">
+      <option value="10">10</option>
+      <option value="25" selected>25</option>
+      <option value="50">50</option>
+      <option value="100">100</option>
+    </select>
+  </div>
+  
+  <div class="table-container">
+    <table id="data-table">
+      <thead>
+        <tr>
+          <th>ICAO</th>
+          <th>Longitude</th>
+          <th>Latitude</th>
+          <th>Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Qui verranno inserite le righe tramite JavaScript -->
+      </tbody>
+    </table>
+  </div>
+  <div class="pagination">
+    <button id="prev-page">Indietro</button>
+    <button id="next-page">Avanti</button>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
