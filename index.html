@@ -22,8 +22,8 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 // Aggiungi le coordinate degli aeroporti
-var airportA = L.latLng(airportA_lat, airportA_lng);
-var airportB = L.latLng(airportB_lat, airportB_lng);
+var airportA = L.latLng(12.145964, 41.474416);
+var airportB = L.latLng(7.64963, 45.200802);
 
 // Crea una rotta tra gli aeroporti
 var route = L.polyline([airportA, airportB], { color: 'blue' }).addTo(map);
