@@ -40,39 +40,41 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/mode/htmlmixed/htmlmixed.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/mode/css/css.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/mode/javascript/javascript.min.js"></script>
-    <script>
-        const htmlEditor = CodeMirror.fromTextArea(document.getElementById("htmlEditor"), {
-            mode: "htmlmixed",
-            theme: "default"
-        });
+<!-- ... (il codice precedente rimane invariato) ... -->
 
-        const cssEditor = CodeMirror.fromTextArea(document.getElementById("cssEditor"), {
-            mode: "css",
-            theme: "default"
-        });
+<script>
+    const htmlEditor = CodeMirror.fromTextArea(document.getElementById("htmlEditor"), {
+        mode: "htmlmixed",
+        theme: "default"
+    });
 
-        const jsEditor = CodeMirror.fromTextArea(document.getElementById("jsEditor"), {
-            mode: "javascript",
-            theme: "default"
-        });
+    const cssEditor = CodeMirror.fromTextArea(document.getElementById("cssEditor"), {
+        mode: "css",
+        theme: "default"
+    });
 
-        const outputFrame = document.getElementById("outputFrame").contentWindow.document;
+    const jsEditor = CodeMirror.fromTextArea(document.getElementById("jsEditor"), {
+        mode: "javascript",
+        theme: "default"
+    });
 
-        function updateOutput() {
-            const htmlContent = htmlEditor.getValue();
-            const cssContent = "<style>" + cssEditor.getValue() + "</style>";
-            const jsContent = "<script>" + jsEditor.getValue() + "</script>";
+    const outputFrame = document.getElementById("outputFrame").contentWindow.document;
 
-            outputFrame.open();
-            outputFrame.write(htmlContent + cssContent + jsContent);
-            outputFrame.close();
-        }
+    function updateOutput() {
+        const htmlContent = encodeURIComponent(htmlEditor.getValue());
+        const cssContent = "<style>" + encodeURIComponent(cssEditor.getValue()) + "</style>";
+        const jsContent = "<script>" + encodeURIComponent(jsEditor.getValue()) + "</script>";
 
-        htmlEditor.on("change", updateOutput);
-        cssEditor.on("change", updateOutput);
-        jsEditor.on("change", updateOutput);
+        outputFrame.open();
+        outputFrame.write(decodeURIComponent(htmlContent) + decodeURIComponent(cssContent) + decodeURIComponent(jsContent));
+        outputFrame.close();
+    }
 
-        updateOutput();
-    </script>
+    htmlEditor.on("change", updateOutput);
+    cssEditor.on("change", updateOutput);
+    jsEditor.on("change", updateOutput);
+
+    updateOutput();
+</script>
 </body>
 </html>
