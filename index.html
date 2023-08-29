@@ -16,13 +16,13 @@
 // Carica i dati degli aeroporti da un file .dat (sostituisci con il percorso corretto)
 fetch("airports.dat")
     .then(response => response.text())
-    .then(data => {
-        var lines = data.split("/");
-        var airportsData = [];
+    .then(airportsData => {
+        var airports = airportsData.split("/");
+        var airportsMap = new Map();
 
-        lines.forEach(line => {
-            var [ICAO, LONGITUDINE, LATITUDINE, NOME] = line.split("/");
-            airportsData.push({ ICAO, LONGITUDINE, LATITUDINE, NOME });
+        airports.forEach(airport => {
+            var [ICAO, LONGITUDINE, LATITUDINE, NOME] = airport.split("/");
+            airportsMap.set(ICAO, { lat: parseFloat(LATITUDINE), lng: parseFloat(LONGITUDINE) });
         });
 
         // Carica le rotte da un file .dat (sostituisci con il percorso corretto)
@@ -40,8 +40,8 @@ fetch("airports.dat")
                 routes.forEach(route => {
                     var [COMPAGNIA, DEP, ARR] = route.split("/");
 
-                    var depCoordinates = getCoordinatesFromICAO(DEP, airportsData);
-                    var arrCoordinates = getCoordinatesFromICAO(ARR, airportsData);
+                    var depCoordinates = airportsMap.get(DEP);
+                    var arrCoordinates = airportsMap.get(ARR);
 
                     if (depCoordinates && arrCoordinates) {
                         // Traccia la rotta sulla mappa
@@ -60,18 +60,6 @@ fetch("airports.dat")
         console.error("Errore nel caricamento dei dati degli aeroporti:", error);
     });
 
-// Funzione per ottenere le coordinate dall'ICAO
-function getCoordinatesFromICAO(icao, airportsData) {
-    for (var i = 0; i < airportsData.length; i++) {
-        if (airportsData[i].ICAO === icao) {
-            return {
-                lat: parseFloat(airportsData[i].LATITUDINE),
-                lng: parseFloat(airportsData[i].LONGITUDINE)
-            };
-        }
-    }
-    return null;  // Aeroporto non trovato
-}
   </script>
 </body>
 </html>
