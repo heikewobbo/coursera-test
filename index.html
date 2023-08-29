@@ -9,7 +9,10 @@
             height: 500px;
         }
     </style>
-  <script>
+</head>
+<body>
+    <div id="map"></div>
+      <script>
     // Inizializza la mappa
 var map = L.map('map').setView([51.505, -0.09], 5);
 
@@ -32,8 +35,5 @@ L.marker(airportB).addTo(map).bindPopup('Aeroporto B');
 // Centro la mappa sulla rotta
 map.fitBounds(route.getBounds());
   </script>
-</head>
-<body>
-    <div id="map"></div>
 </body>
 </html>
