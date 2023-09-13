@@ -31,7 +31,7 @@
 
     // Richiedi dati sugli aeroporti da aviationstack
     var apiKey = '1657c83be8cbfaaa74a58aa6ac8bd419'; // Sostituisci con la tua chiave API
-    var apiUrl = 'http://api.aviationstack.com/v1/airports?access_key=' + apiKey;
+    var apiUrl = 'https://api.aviationstack.com/v1/airports?access_key=' + apiKey;
 
     $.getJSON(apiUrl, function(data) {
         // Itera attraverso i dati sugli aeroporti e crea marcatori sulla mappa
