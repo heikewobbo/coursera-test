@@ -1,46 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mappa Aeroporti</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <style>
-        /* Imposta le dimensioni della mappa */
-        #map {
-            height: 500px;
-        }
-    </style>
+    <title>Ottieni informazioni su un set LEGO</title>
 </head>
 <body>
+    <h1>Ottieni informazioni su un set LEGO</h1>
+    <p>Inserisci il numero del set LEGO:</p>
+    <input type="text" id="setNumber">
+    <button onclick="getSetInfo()">Ottieni informazioni</button>
 
-<!-- Crea un contenitore per la mappa -->
-<div id="map"></div>
+    <h2>Informazioni sul set:</h2>
+    <p id="setName"></p>
 
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Assicurati di includere jQuery -->
+    <script>
+        function getSetInfo() {
+            const setNumber = document.getElementById("setNumber").value;
+            const apiKey = "9ddcd2a8d6656a5db71f22ef91ae5d91";
+            const apiUrl = `https://rebrickable.com/api/v3/lego/sets/${setNumber}/?key=${apiKey}`;
 
-<script>
-    // Inizializza la mappa con una vista iniziale e una posizione centrale
-    var map = L.map('map').setView([51.505, -0.09], 3);
-
-    // Aggiungi una mappa di base (puoi personalizzarla con le tue preferenze)
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-
-    // Richiedi dati sugli aeroporti da aviationstack
-    var apiKey = 'b9438aa77a888fd706e0a4c04f510769'; // Sostituisci con la tua chiave API
-    var apiUrl = 'http://api.aviationstack.com/v1/airports?access_key=' + apiKey;
-
-    $.getJSON(apiUrl, function(data) {
-        // Itera attraverso i dati sugli aeroporti e crea marcatori sulla mappa
-        data.data.forEach(function(airport) {
-            L.marker([airport.latitude, airport.longitude]).addTo(map)
-                .bindPopup(airport.name); // Pop-up con il nome dell'aeroporto
-        });
-    });
-
-</script>
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.detail === "Not found.") {
+                        document.getElementById("setName").textContent = "Set non trovato.";
+                    } else {
+                        document.getElementById("setName").textContent = "Nome del set: " + data.name;
+                    }
+                })
+                .catch(error => {
+                    console.error("Errore nella richiesta all'API:", error);
+                    document.getElementById("setName").textContent = "Si è verificato un errore.";
+                });
+        }
+    </script>
 </body>
 </html>
